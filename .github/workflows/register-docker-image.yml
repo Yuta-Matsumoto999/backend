@@ -12,6 +12,7 @@ env:
 jobs:
   docker-image-register:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
 
     steps:
       - uses: actions/checkout@v2
@@ -60,7 +61,7 @@ jobs:
         uses: rtCamp/action-slack-notify@v2.0.2
         if: success()
         env:
-          SLACK_TITLE: CI flow / Success
+          SLACK_TITLE: register docker image flow / Success
           SLACK_COLOR: good
           SLACK_MESSAGE: Message for Success
 
@@ -68,7 +69,7 @@ jobs:
         uses: rtCamp/action-slack-notify@v2.0.2
         if: failure()
         env:
-          SLACK_TITLE: CI flow / Failure
+          SLACK_TITLE: register docker image flow / Failure
           SLACK_COLOR: danger
           SLACK_MESSAGE: Message for Failure
 
@@ -76,6 +77,6 @@ jobs:
         uses: rtCamp/action-slack-notify@v2.0.2
         if: cancelled()
         env:
-          SLACK_TITLE: CI flow / Cancel
+          SLACK_TITLE: register docker image flow / Cancel
           SLACK_COLOR: danger
           SLACK_MESSAGE: Message for Cancel
