@@ -36,18 +36,18 @@ RUN apt-get update \
 
 FROM base AS development
 
-COPY ./infra/docker/php/php.development.ini /usr/local/etc/php/php.ini
+COPY ./php.development.ini /usr/local/etc/php/php.ini
 
 FROM development AS development-xdebug
 
 RUN pecl install xdebug && \
   docker-php-ext-enable xdebug
 
-COPY ./infra/docker/php/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
+COPY ./xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 
 FROM base AS deploy
 
-COPY ./infra/docker/php/php.deploy.ini /usr/local/etc/php/php.ini
+COPY ./php.deploy.ini /usr/local/etc/php/php.ini
 COPY ./src /workspace
 
 RUN composer install -q -n --no-ansi --no-dev --no-scripts --no-progress --prefer-dist \

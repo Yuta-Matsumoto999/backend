@@ -4,4 +4,4 @@ WORKDIR /workspace
 
 ENV TZ=Asia/Tokyo
 
-COPY ./infra/docker/nginx/*.conf /etc/nginx/conf.d/
+COPY ./*.conf /etc/nginx/conf.d/
