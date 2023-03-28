@@ -1,10 +1,9 @@
 laravel-install:
 	docker compose exec app composer create-project --prefer-dist laravel/laravel .
-install:
-	mkdir -p src
+
+setup:
 	@make build
 	@make up
-	@make laravel-install
 	docker compose exec app composer install
 	docker compose exec app cp .env.example .env
 	docker compose exec app php artisan key:generate

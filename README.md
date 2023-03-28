@@ -1,38 +1,11 @@
-# docker-laravel 🐳
-
-<p align="center">
-    <img src="https://user-images.githubusercontent.com/35098175/145682384-0f531ede-96e0-44c3-a35e-32494bd9af42.png" alt="docker-laravel">
-</p>
-<p align="center">
-    <img src="https://github.com/ucan-lab/docker-laravel/actions/workflows/laravel-create-project.yml/badge.svg" alt="Test laravel-create-project.yml">
-    <img src="https://github.com/ucan-lab/docker-laravel/actions/workflows/laravel-git-clone.yml/badge.svg" alt="Test laravel-git-clone.yml">
-    <img src="https://img.shields.io/github/license/ucan-lab/docker-laravel" alt="License">
-</p>
-
+# Backend
 ## Introduction
 
-Build a simple laravel development environment with docker-compose. Compatible with Windows(WSL2), macOS(M1) and Linux.
+Build a laravel environment with docker-compose. You can run unit tests using the github actions workflow.
+Also, you can automatically deploy to the ECS on Fargate environment prepared on AWS.
+See the wiki for a detailed explanation of Workflows. 
 
 ## Usage
-
-### Laravel install
-
-1. Click [Use this template](https://github.com/ucan-lab/docker-laravel/generate)
-2. Git clone & change directory
-3. Execute the following command
-
-```bash
-$ mkdir -p src
-$ docker compose build
-$ docker compose up -d
-$ docker compose exec app composer create-project --prefer-dist laravel/laravel .
-$ docker compose exec app php artisan key:generate
-$ docker compose exec app php artisan storage:link
-$ docker compose exec app chmod -R 777 storage bootstrap/cache
-$ docker compose exec app php artisan migrate
-```
-
-http://localhost
 
 ### Laravel setup
 
@@ -40,15 +13,14 @@ http://localhost
 2. Execute the following command
 
 ```bash
-$ make install
+$ make setup
 ```
 
 http://localhost
 
 ## Tips
 
-- Read this [Makefile](https://github.com/ucan-lab/docker-laravel/blob/main/Makefile).
-- Read this [Wiki](https://github.com/ucan-lab/docker-laravel/wiki).
+- Read this [Makefile](https://github.com/Yuta-Matsumoto999/backend/blob/main/Makefile).
 
 ## Container structures
 
