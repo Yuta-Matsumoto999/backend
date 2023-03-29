@@ -18,9 +18,6 @@ jobs:
       - name: build image
         run: docker compose up -d
 
-      - name: run container
-        run: docker compose run
-
       - name: docker image ps
         run: docker compose ps
 
