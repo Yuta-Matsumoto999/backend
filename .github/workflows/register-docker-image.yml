@@ -1,7 +1,7 @@
 name: register-docker-image
 
 on:
-  merge:
+  push:
     branches:
       - "features"
         paths:
