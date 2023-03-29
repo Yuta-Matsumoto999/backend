@@ -47,6 +47,10 @@ COPY ./infra/docker/php/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 
 FROM base AS deploy
 
+RUN apt update \
+    && apt install -y supervisor
+
+COPY ./infra/docker/php/laravel-worker.conf /etc/supervisor/conf.d
 COPY ./infra/docker/php/php.deploy.ini /usr/local/etc/php/php.ini
 COPY ./src /workspace
 
