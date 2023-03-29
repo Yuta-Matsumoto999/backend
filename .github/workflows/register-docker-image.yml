@@ -1,13 +1,11 @@
 name: register-docker-image
 
-on:
-  push:
-    branches:
-      - "features"
-    path:
-      - "./infra/**"
+on: [push]
 
 env:
+  APP_TAG: 1.0.0
+  WEB_TAG: 1.0.0
+  DB_TAG: 1.0.0
   SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
   SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
 
@@ -38,17 +36,28 @@ jobs:
           context: .
           file: ./infra/docker/php/Dockerfile
           push: true
+          target: development
           platforms: linux/arm64, linux/amd64
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/backend-app:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/backend-app:$APP_TAG
 
-      - name: Build & Push nginx Container
+      - name: push latest app Container
+        run: |
+          docker -t ${{ secrets.DOCKERHUB_USERNAME }}/backend-app:$APP_TAG ${{ secrets.DOCKERHUB_USERNAME }}/backend-app:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/backend-app:latest
+
+      - name: Build & Push web Container
         uses: docker/build-push-action@v2
         with:
           context: .
           file: ./infra/docker/nginx/Dockerfile
           push: true
           platforms: linux/arm64, linux/amd64
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/backend-web:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/backend-web:$WEB_TAG
+
+      - name: push latest web Container
+        run: |
+          docker -t ${{ secrets.DOCKERHUB_USERNAME }}/backend-web:$WEB_TAG ${{ secrets.DOCKERHUB_USERNAME }}/backend-web:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/backend-web:latest
 
       - name: Build & Push db Container
         uses: docker/build-push-action@v2
@@ -57,7 +66,12 @@ jobs:
           file: ./infra/docker/mysql/Dockerfile
           push: true
           platforms: linux/arm64, linux/amd64
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/backend-db:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/backend-db:DB_TAG
+
+      - name: push latest db Container
+        run: |
+          docker -t ${{ secrets.DOCKERHUB_USERNAME }}/backend-db:$DB_TAG ${{ secrets.DOCKERHUB_USERNAME }}/backend-db:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/backend-db:latest
 
       - name: Success
         uses: rtCamp/action-slack-notify@v2.0.2
