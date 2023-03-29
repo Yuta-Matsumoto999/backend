@@ -18,42 +18,47 @@ jobs:
       - name: build image
         run: docker compose up -d
 
+      - name: docker image ps
+        run: docker compose ps
+
       - name: composer install
-        run: docker compose exec backend-app composer install
+        run: docker compose exec app composer install
 
       - name: composer version
-        run: docker compose exec backend-app composer -v
+        run: docker compose exec app composer -v
 
       - name: php artisan version
-        run: docker compose exec backend-app php artisan version
+        run: docker compose exec app php artisan --version
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-access-key-id: AKIA2LGS6U77VMUQ23ZC
+          aws-secret-access-key: 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
           aws-region: ap-northeast-1
 
       - name: Download file from S3
         env:
-          S3_DOWNLOAD_BUCKET: ${{ secrets.S3_DOWNLOAD_BUCKET }}
-        run: |
-          aws s3 cp s3://$S3_DOWNLOAD_BUCKET/test.env ./  --quiet
+          S3_DOWNLOAD_BUCKET: ma2mo10-laravel-project-environment
+        run: aws s3 cp s3://$S3_DOWNLOAD_BUCKET/test.env ./ --quiet
+
+      - name: open file
+        run: cat ./test.env
 
       - name: docker cp test.env
-        run: docker cp ./test.env backend-app:/
+        run: docker cp ./test.env app:/
 
       - name: laravel setting
-        run: docker compose exec backend-app cp test.env .env &&
-            docker compose exec backend-app php artisan key:generate &&
-            docker compose exec backend-app php artisan storage:link &&
-            docker compose exec backend-app chmod -R 777 storage bootstrap/cache
+        run: docker compose exec app cp test.env .env &&
+            docker compose exec app php artisan key:generate &&
+            docker compose exec app php artisan storage:link &&
+            docker compose exec app chmod -R 777 storage bootstrap/cache
 
       - name: migration test
-        run: docker compose exec backend-app php artisan migrate:fresh --seed
+        run: docker compose exec app php artisan migrate:fresh --seed
 
       - name: unit-test
-        run: docker compose exec backend-app php artisan test
+        run: docker compose exec app php artisan test
 
       - name: Success
         uses: rtCamp/action-slack-notify@v2.0.2
