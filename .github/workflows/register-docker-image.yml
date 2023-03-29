@@ -36,7 +36,6 @@ jobs:
           context: .
           file: ./infra/docker/php/Dockerfile
           push: true
-          target: development
           platforms: linux/arm64, linux/amd64
           tags: doma2mo10/backend-app:${{ env.APP_TAG }}
 
