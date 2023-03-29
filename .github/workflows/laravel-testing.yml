@@ -46,9 +46,6 @@ jobs:
       - name: open file
         run: cat ./test.env
 
-      - name: docker cp test.env
-        run: docker cp ./test.env app:/
-
       - name: laravel setting
         run: docker compose exec app cp test.env .env &&
             docker compose exec app php artisan key:generate &&
