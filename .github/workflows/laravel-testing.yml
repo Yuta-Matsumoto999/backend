@@ -8,7 +8,7 @@ env:
 
 jobs:
   laravel-testing:
-    run-on: ubuntu-latest
+    runs-on: ubuntu-latest
     timeout-minutes: 20
 
     steps:
