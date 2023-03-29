@@ -24,8 +24,8 @@ jobs:
         uses: docker/login-action@v1
         with:
           registry: docker.io
-          username: ${{ DOCKERHUB_USERNAME }}
-          password: ${{ DOCKERHUB_TOKEN }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build & Push app Container
         uses: docker/build-push-action@v2
@@ -34,7 +34,7 @@ jobs:
           file: ./infra/docker/php/Dockerfile
           push: true
           platforms: linux/arm64, linux/amd64
-          tags: ${{ DOCKERHUB_USERNAME }}/backend-app:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/backend-app:latest
 
       - name: Build & Push nginx Container
         uses: docker/build-push-action@v2
@@ -43,7 +43,7 @@ jobs:
           file: ./infra/docker/nginx/Dockerfile
           push: true
           platforms: linux/arm64, linux/amd64
-          tags: ${{ DOCKERHUB_USERNAME }}/backend-web:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/backend-web:latest
 
       - name: Build & Push db Container
         uses: docker/build-push-action@v2
@@ -52,7 +52,7 @@ jobs:
           file: ./infra/docker/mysql/Dockerfile
           push: true
           platforms: linux/arm64, linux/amd64
-          tags: ${{ DOCKERHUB_USERNAME }}/backend-db:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/backend-db:latest
 
       - name: Success
         uses: rtCamp/action-slack-notify@v2.0.2
