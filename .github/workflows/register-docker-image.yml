@@ -1,9 +1,6 @@
 name: register-docker-image
 
-on:
-  push:
-    paths:
-      - "./infra/**"
+on: [push]
 
 env:
   SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
