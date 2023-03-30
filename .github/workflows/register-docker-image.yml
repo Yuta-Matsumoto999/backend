@@ -1,11 +1,13 @@
 name: register-docker-image
 
-on: [push]
+on:
+  push:
+    branches:
+      - "features"
+    paths:
+      - "./infra/**"
 
 env:
-  APP_TAG: 1.0.0
-  WEB_TAG: 1.0.0
-  DB_TAG: 1.0.0
   SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
   SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
 
@@ -27,8 +29,8 @@ jobs:
         uses: docker/login-action@v1
         with:
           registry: docker.io
-          username: doma2mo10
-          password: dckr_pat_A3h_qLuO-5RDL906Tcs9mOzZzhI
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build & Push app Container
         uses: docker/build-push-action@v2
@@ -37,12 +39,7 @@ jobs:
           file: ./infra/docker/php/Dockerfile
           push: true
           platforms: linux/arm64, linux/amd64
-          tags: doma2mo10/backend-app:${{ env.APP_TAG }}
-
-      - name: push latest app Container
-        run: |
-          docker tag doma2mo10/backend-app:${{ env.APP_TAG }} doma2mo10/backend-app:latest
-          docker push doma2mo10/backend-app:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/backend-app:latest
 
       - name: Build & Push web Container
         uses: docker/build-push-action@v2
@@ -51,12 +48,7 @@ jobs:
           file: ./infra/docker/nginx/Dockerfile
           push: true
           platforms: linux/arm64, linux/amd64
-          tags: doma2mo10/backend-web:${{ env.WEB_TAG }}
-
-      - name: push latest web Container
-        run: |
-          docker tag doma2mo10/backend-web:${{ env.WEB_TAG }} doma2mo10/backend-web:latest
-          docker push doma2mo10/backend-web:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/backend-web:latest
 
       - name: Build & Push db Container
         uses: docker/build-push-action@v2
@@ -65,12 +57,7 @@ jobs:
           file: ./infra/docker/mysql/Dockerfile
           push: true
           platforms: linux/arm64, linux/amd64
-          tags: doma2mo10/backend-db:${{ env.DB_TAG }}
-
-      - name: push latest db Container
-        run: |
-          docker tag doma2mo10/backend-db:${{ env.DB_TAG }} doma2mo10/backend-db:latest
-          docker push doma2mo10/backend-db:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/backend-db:latest
 
       - name: Success
         uses: rtCamp/action-slack-notify@v2.0.2
